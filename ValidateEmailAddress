@@ -1,0 +1,41 @@
+let ValidateEmailAddress = (email) => {
+
+    if (!/^[a-zA-Z0-9.@_-]+$/.test(email)) {
+        return false
+    }
+    var countAt = (email.match(/@/g) || []).length;
+    if (countAt > 1 || countAt == 0) return false;
+    var emailParts = email.split('@');
+    if (emailParts[0].length < 2 || emailParts[1] < 4 || emailParts[1].lastIndexOf(".") == -1 ||
+        !IsAllowedCharacter(emailParts[0][0])) {
+        return false
+    }
+
+    var length = emailParts[1].length;
+    var lastIndex = emailParts[1].lastIndexOf(".");
+    if (length - lastIndex <= 2) return false;
+    //check for -,.,_ double accurance
+    for (let i = 0; i < email.length; i++) {
+        if (!IsAllowedCharacter(email[i]) && !IsAllowedCharacter(email[i + 1])) return false;
+    }
+    for (let i = lastIndex + 1; i < length; i++) {
+        if (!IsCharacterString(emailParts[1][i])) return false;
+    }
+    return true
+}
+let IsAllowedCharacter = (val) => {
+    if (typeof val === 'undefined') return true;
+    if (isCharacterNumeric(val) || IsCharacterString(val)) return true;
+    return false
+}
+let isCharacterNumeric = (character) => {
+    /* var numeric = /^\d+$/.test(val);*/
+    return $.isNumeric(character);
+}
+let IsCharacterString = (character) => {
+    /* /^[a-zA-Z()]+$/.test(str); ->we can also use this for string*/
+    var characterArray = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m",
+        "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"];
+    if (characterArray.indexOf(character.toLowerCase()) != -1) return true;
+    return false
+}
